@@ -21,10 +21,10 @@
 #include <EEPROM.h>
 
 // Setup pins and defaults.
-const int AudioPin = 13;
-const int RelaisPin = 9;
-const int defaultBrightness = 2;
-const int constDisplayStartColum = 18;
+const int AudioPin(13);
+const int RelaisPin(9);
+const int defaultBrightness(2);
+const int constDisplayStartColum(18);
 
 // Define the pins for the joystick and buttons.
 #define PIN_ANALOG_X A0
@@ -39,7 +39,7 @@ const int constDisplayStartColum = 18;
 
 
 // Setup the 8x8 LEDs.
-const int numDevices = 4;  // Number of MAX7219 devices
+const int numDevices(4);  // Number of MAX7219 devices
 // DIN     (Orange)  D12
 // CLK     (Green)    D11
 // CS      (Yellow)    D10
@@ -600,7 +600,7 @@ unsigned char charcodes[] = { 32,                                               
 
 
 int GetCharIndex(const unsigned char c) {
-    int charindex = -1;
+    int charindex(-1);
 
     for (int i = 0; i < sizeof(charcodes); i++) {
         if (charcodes[i] == c) {
@@ -613,7 +613,7 @@ int GetCharIndex(const unsigned char c) {
 }
 
 int GetCharWidth(const unsigned char c) {
-    const int charindex = GetCharIndex(c);
+    const int charindex(GetCharIndex(c));
 
     if (charindex != -1)
         return charwidth[charindex] + 1;
@@ -622,9 +622,9 @@ int GetCharWidth(const unsigned char c) {
 }
 
 int GetTextWidth(const char* text) {
-    int len = strlen(text);
-    int z = 0;
-    for (unsigned int i = 0; i < len; i++) {
+    int len(strlen(text));
+    int z(0);
+    for (unsigned int i(0); i < len; i++) {
         z += GetCharWidth(text[i]);
     }
 
@@ -639,8 +639,8 @@ uint8_t mirrorByte(uint8_t byte) {
 }
 
 void toSmallNumberString(char* nstr, int z) {
-    int n = 0;
-    int d = z;
+    int n(0);
+    int d(z);
     do {
         d = d / 10;
         n++;
@@ -654,15 +654,15 @@ void toSmallNumberString(char* nstr, int z) {
 }
 
 int SetChar(const unsigned char c, int z, const bool useSmallFont = false) {
-    const int charindex = GetCharIndex(c);
+    const int charindex(GetCharIndex(c));
 
-    int charoffset = 0;
+    int charoffset(0);
     for (int i = 0; i < charindex; i++) {
         charoffset += charwidth[i];
     }
 
-    unsigned char* pFont = font + charoffset;
-    const unsigned char w = charwidth[charindex];
+    unsigned char* pFont(font + charoffset);
+    const unsigned char w(charwidth[charindex]);
 
     // Serial.print("char = ");
     // Serial.print((int)c);
@@ -676,9 +676,9 @@ int SetChar(const unsigned char c, int z, const bool useSmallFont = false) {
     // Serial.println(w);
 
     for (int i = 0; i <= w; i++) {
-        const int block = (i + z) / 8;  // number of 8x8 element
-        const int j = (i + z) % 8;
-        const unsigned char c = i < w ? pFont[w - i - 1] : 0;
+        const int block((i + z) / 8);  // number of 8x8 element
+        const int j((i + z) % 8);
+        const unsigned char c(i < w ? pFont[w - i - 1] : 0);
 
         const uint8_t mirrorC(mirrorByte(c));
 
@@ -697,7 +697,7 @@ int SetChar(const unsigned char c, int z, const bool useSmallFont = false) {
 }
 
 int TextDisplay(const char* text, int z = 0, const bool useSmallFont = false) {
-    int len = strlen(text);
+    int len(strlen(text));
 
     // Serial.println(text);
     // Serial.println(len);
@@ -714,7 +714,7 @@ int TextDisplay(const char* text, int z = 0, const bool useSmallFont = false) {
     if (!useSmallFont)
     {
         // Text is smaller than the range and will be cleared with ' '.
-        int k = z;
+        int k(z);
         while (k < 32)
             k = SetChar(' ', k);
     }
@@ -724,8 +724,8 @@ int TextDisplay(const char* text, int z = 0, const bool useSmallFont = false) {
 
 void FillSolidArea(const int startCol, const int endCol, const byte value = 255) {
     for (int colIndex = startCol; colIndex <= endCol; colIndex++) {
-        const int block = colIndex / 8;  // number of 8x8 element
-        const int col = colIndex % 8;
+        const int block(colIndex / 8);  // number of 8x8 element
+        const int col(colIndex % 8);
 
         lc.setColumn(block, 7 - col, value);
     }
@@ -740,8 +740,8 @@ public:
         displayStartColum(constDisplayStartColum),
         EEPROMaddrBrightness(4),
         EEPROMaddrTimer(EEPROMaddrBrightness + 4) {
-        const int magicNumberAddress = 0;  // Address to store the magic number.
-        const int magicNumber = 12345;     // A unique number to identify.
+        const int magicNumberAddress(0);  // Address to store the magic number.
+        const int magicNumber(12345);     // A unique number to identify.
 
         int storedNumber;
         EEPROM.get(magicNumberAddress, storedNumber);
@@ -791,7 +791,7 @@ public:
     };
 
     int getBrightness() const {
-        int brightness = defaultBrightness;
+        int brightness(defaultBrightness);
         EEPROM.get(EEPROMaddrBrightness, brightness);  // Read the int value from EEPROM.
 
         if (brightness < 0 && brightness > 15) {
@@ -816,7 +816,7 @@ public:
     }
 
     int getTimerValue() const {
-        int value = 10;
+        int value(10);
         EEPROM.get(EEPROMaddrTimer, value);  // Read the int value from EEPROM.
 
         return value;
@@ -1450,7 +1450,7 @@ class TaskManager {
 public:
     TaskManager()
         : numTasks(DarkroomTasks::End),
-        activeTaskIndex(DarkroomTasks::EnlargerTimerTask) {
+        activeTaskIndex(DarkroomTasks::LEDBrightnessTask) {
         tasks = new CTask * [numTasks];
 
         // Create the task list matching the order of the DarkroomTasks enum.
@@ -1483,7 +1483,7 @@ public:
     }
 
     CTask* getTask() const {
-        CTask* task = tasks[activeTaskIndex];
+        CTask* task(tasks[activeTaskIndex]);
         if (task->initialized) {
             return task;
         }
@@ -1660,7 +1660,7 @@ public:
 
     virtual void CheckInput()
     {
-        const int position = analogRead(pin);
+        const int position(analogRead(pin));
         bool analogState(false);
 
         // Add threshold to avoid flickering.
