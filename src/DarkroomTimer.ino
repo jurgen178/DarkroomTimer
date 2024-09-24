@@ -9,7 +9,7 @@
 // DevelopStopFixTask : 3 timers for develop, stop bath and fix.
 // GeneralTimerTask : General timer starting from 0s.
 //
-// Uses the Gamepad Input shield. 
+// Uses the Gamepad Input shield.
 // Up/down button/joystick changes task, and left/right button/joystick changes state/setting.
 //
 // Uses Arduino Uno R4.
@@ -37,9 +37,8 @@ const int constDisplayStartColum(18);
 #define BUTTON_F 7
 #define BUTTON_K 8
 
-
 // Setup the 8x8 LEDs.
-const int numDevices(4);  // Number of MAX7219 devices
+const int numDevices(4); // Number of MAX7219 devices
 // DIN     (Orange)  D12
 // CLK     (Green)    D11
 // CS      (Yellow)    D10
@@ -48,7 +47,8 @@ const int numDevices(4);  // Number of MAX7219 devices
 LedControl lc = LedControl(12, 11, 10, numDevices);
 
 // Set the order of the darkroom tasks.
-enum DarkroomTasks {
+enum DarkroomTasks
+{
     LEDBrightnessTask,  // Sets the brigness of the 8x8 darkroom ilumination LEDs.
     EnlargerOnOffTask,  // Manual enlarger switch.
     EnlargerTimerTask,  // Timed enlarger switch.
@@ -58,17 +58,19 @@ enum DarkroomTasks {
     End,
 };
 
-enum DevelopStopFixStage {
-    BeginStage,  // Adding a sentinel value for the begin.
+enum DevelopStopFixStage
+{
+    BeginStage, // Adding a sentinel value for the begin.
 
     DevelopStage,
     StopBathStage,
     FixStage,
 
-    EndStage,  // Adding a sentinel value for the end.
+    EndStage, // Adding a sentinel value for the end.
 };
 
-DevelopStopFixStage operator++(DevelopStopFixStage& stage, int) {
+DevelopStopFixStage operator++(DevelopStopFixStage &stage, int)
+{
     if (stage < DevelopStopFixStage::EndStage - 1)
         stage = (DevelopStopFixStage)(stage + 1);
     else
@@ -77,16 +79,15 @@ DevelopStopFixStage operator++(DevelopStopFixStage& stage, int) {
     return stage;
 }
 
-DevelopStopFixStage operator--(DevelopStopFixStage& stage, int) {
+DevelopStopFixStage operator--(DevelopStopFixStage &stage, int)
+{
     if (stage > DevelopStopFixStage::BeginStage + 1)
         stage = (DevelopStopFixStage)(stage - 1);
     else
         stage = (DevelopStopFixStage)(DevelopStopFixStage::EndStage - 1);
 
-
     return stage;
 }
-
 
 unsigned char font[] = {
     // -------- Space
@@ -576,34 +577,36 @@ unsigned char font[] = {
 };
 
 // Char width table
-unsigned char charwidth[] = { 4, 4, 4, 3, 4, 3, 3, 4, 4, 3, 3, 4, 3, 5, 4, 4, 4, 4, 4, 3, 3, 4, 5, 5, 4, 3, 3,
-                              3, 4, 2, 3, 3, 3, 3, 4, 3, 4, 4, 1, 2, 3, 7, 3, 4, 3, 3, 5, 2, 2, 3, 5, 2, 4, 1, 3,
-                              4, 4, 3, 4, 4, 3, 4, 4, 3, 3, 4, 2, 5, 4, 4, 4, 4, 3, 4, 3, 4, 3, 5, 3, 4, 4,
-                              18, 18, 7, 23, 6,
-                              3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-                              0 };
+unsigned char charwidth[] = {4, 4, 4, 3, 4, 3, 3, 4, 4, 3, 3, 4, 3, 5, 4, 4, 4, 4, 4, 3, 3, 4, 5, 5, 4, 3, 3,
+                             3, 4, 2, 3, 3, 3, 3, 4, 3, 4, 4, 1, 2, 3, 7, 3, 4, 3, 3, 5, 2, 2, 3, 5, 2, 4, 1, 3,
+                             4, 4, 3, 4, 4, 3, 4, 4, 3, 3, 4, 2, 5, 4, 4, 4, 4, 3, 4, 3, 4, 3, 5, 3, 4, 4,
+                             18, 18, 7, 23, 6,
+                             3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+                             0};
 
 // ASCII Codes of the implemented characters
-unsigned char charcodes[] = { 32,                                                                                                      // ' '
-                              65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90,  // A-Z
-                              255,
-                              48, 49, 50, 51, 52, 53, 54, 55, 56, 57,                                                           // 0-9
-                              58, 59, 33,                                                                                       // :;!
-                              3,                                                                                                // Heart
-                              60, 61, 62, 63, 64,                                                                               // <=>?@
-                              40, 41, 42, 43, 44, 45, 46, 47,                                                                   // ()*+,-./
-                              97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116,  // a-z
-                              117, 118, 119, 120, 121, 122,
-                              123, 125, 126, 124, 91,                  // {}~| for symbols
-                              20, 21, 22, 23, 24, 25, 26, 27, 28, 29,  // small numbers
-                              0 };
+unsigned char charcodes[] = {32,                                                                                                     // ' '
+                             65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, // A-Z
+                             255,
+                             48, 49, 50, 51, 52, 53, 54, 55, 56, 57,                                                          // 0-9
+                             58, 59, 33,                                                                                      // :;!
+                             3,                                                                                               // Heart
+                             60, 61, 62, 63, 64,                                                                              // <=>?@
+                             40, 41, 42, 43, 44, 45, 46, 47,                                                                  // ()*+,-./
+                             97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, // a-z
+                             117, 118, 119, 120, 121, 122,
+                             123, 125, 126, 124, 91,                 // {}~| for symbols
+                             20, 21, 22, 23, 24, 25, 26, 27, 28, 29, // small numbers
+                             0};
 
-
-int GetCharIndex(const unsigned char c) {
+int GetCharIndex(const unsigned char c)
+{
     int charindex(-1);
 
-    for (int i = 0; i < sizeof(charcodes); i++) {
-        if (charcodes[i] == c) {
+    for (int i = 0; i < sizeof(charcodes); i++)
+    {
+        if (charcodes[i] == c)
+        {
             charindex = i;
             break;
         }
@@ -612,7 +615,8 @@ int GetCharIndex(const unsigned char c) {
     return charindex;
 }
 
-int GetCharWidth(const unsigned char c) {
+int GetCharWidth(const unsigned char c)
+{
     const int charindex(GetCharIndex(c));
 
     if (charindex != -1)
@@ -621,47 +625,55 @@ int GetCharWidth(const unsigned char c) {
         return 0;
 }
 
-int GetTextWidth(const char* text) {
+int GetTextWidth(const char *text)
+{
     int len(strlen(text));
     int z(0);
-    for (unsigned int i(0); i < len; i++) {
+    for (unsigned int i(0); i < len; i++)
+    {
         z += GetCharWidth(text[i]);
     }
 
     return z;
 }
 
-uint8_t mirrorByte(uint8_t byte) {
+uint8_t mirrorByte(uint8_t byte)
+{
     byte = (byte & 0xF0) >> 4 | (byte & 0x0F) << 4;
     byte = (byte & 0xCC) >> 2 | (byte & 0x33) << 2;
     byte = (byte & 0xAA) >> 1 | (byte & 0x55) << 1;
     return byte;
 }
 
-void toSmallNumberString(char* nstr, int z) {
+void toSmallNumberString(char *nstr, int z)
+{
     int n(0);
     int d(z);
-    do {
+    do
+    {
         d = d / 10;
         n++;
     } while (d);
 
     nstr[n] = 0;
-    do {
-        nstr[--n] = (z % 10) + 20;  // char codes for small font
+    do
+    {
+        nstr[--n] = (z % 10) + 20; // char codes for small font
         z = z / 10;
     } while (z);
 }
 
-int SetChar(const unsigned char c, int z, const bool useSmallFont = false) {
+int SetChar(const unsigned char c, int z, const bool useSmallFont = false)
+{
     const int charindex(GetCharIndex(c));
 
     int charoffset(0);
-    for (int i = 0; i < charindex; i++) {
+    for (int i = 0; i < charindex; i++)
+    {
         charoffset += charwidth[i];
     }
 
-    unsigned char* pFont(font + charoffset);
+    unsigned char *pFont(font + charoffset);
     const unsigned char w(charwidth[charindex]);
 
     // Serial.print("char = ");
@@ -675,20 +687,24 @@ int SetChar(const unsigned char c, int z, const bool useSmallFont = false) {
     // Serial.print("charwidth = ");
     // Serial.println(w);
 
-    for (int i = 0; i <= w; i++) {
-        const int block((i + z) / 8);  // number of 8x8 element
+    for (int i = 0; i <= w; i++)
+    {
+        const int block((i + z) / 8); // number of 8x8 element
         const int j((i + z) % 8);
         const unsigned char c(i < w ? pFont[w - i - 1] : 0);
 
         const uint8_t mirrorC(mirrorByte(c));
 
-        if (useSmallFont) {
-            for (int r = 0; r < 5; r++) {
+        if (useSmallFont)
+        {
+            for (int r = 0; r < 5; r++)
+            {
                 lc.setLed(block, 7 - r, 7 - j, bitRead(mirrorC, r));
             }
         }
-        else {
-            //lc.setRow(block, 7-j, c); // 90° rotated
+        else
+        {
+            // lc.setRow(block, 7-j, c); // 90° rotated
             lc.setColumn(block, 7 - j, mirrorC);
         }
     }
@@ -696,13 +712,15 @@ int SetChar(const unsigned char c, int z, const bool useSmallFont = false) {
     return w + 1 + z;
 }
 
-int TextDisplay(const char* text, int z = 0, const bool useSmallFont = false) {
+int TextDisplay(const char *text, int z = 0, const bool useSmallFont = false)
+{
     int len(strlen(text));
 
     // Serial.println(text);
     // Serial.println(len);
 
-    for (int i = 0; i < len; i++) {
+    for (int i = 0; i < len; i++)
+    {
         z = SetChar(text[i], z, useSmallFont);
 
         // Text outside of the visible area?
@@ -722,87 +740,101 @@ int TextDisplay(const char* text, int z = 0, const bool useSmallFont = false) {
     return z;
 }
 
-void FillSolidArea(const int startCol, const int endCol, const byte value = 255) {
-    for (int colIndex = startCol; colIndex <= endCol; colIndex++) {
-        const int block(colIndex / 8);  // number of 8x8 element
+void FillSolidArea(const int startCol, const int endCol, const byte value = 255)
+{
+    for (int colIndex = startCol; colIndex <= endCol; colIndex++)
+    {
+        const int block(colIndex / 8); // number of 8x8 element
         const int col(colIndex % 8);
 
         lc.setColumn(block, 7 - col, value);
     }
 }
 
-
-class CTask {
+class CTask
+{
 public:
     CTask()
         : initialized(false),
-        symbolStartColum(9),
-        displayStartColum(constDisplayStartColum),
-        EEPROMaddrBrightness(4),
-        EEPROMaddrTimer(EEPROMaddrBrightness + 4) {
-        const int magicNumberAddress(0);  // Address to store the magic number.
-        const int magicNumber(12345);     // A unique number to identify.
+          symbolStartColum(9),
+          displayStartColum(constDisplayStartColum),
+          EEPROMaddrBrightness(4),
+          EEPROMaddrTimer(EEPROMaddrBrightness + 4)
+    {
+        const int magicNumberAddress(0); // Address to store the magic number.
+        const int magicNumber(12345);    // A unique number to identify.
 
         int storedNumber;
         EEPROM.get(magicNumberAddress, storedNumber);
 
-        if (storedNumber != magicNumber) {
+        if (storedNumber != magicNumber)
+        {
             // EEPROM is not initialized, so initialize it.
             Serial.println("Initializing EEPROM");
 
             EEPROM.put(EEPROMaddrBrightness, 5);
             EEPROM.put(EEPROMaddrTimer, 10);
 
-            EEPROM.put(magicNumberAddress, magicNumber);  // Write the magic number.
+            EEPROM.put(magicNumberAddress, magicNumber); // Write the magic number.
         }
 
         const int brightness(getBrightness());
-        for (int d = 0; d < numDevices; d++) {
-            lc.setIntensity(d, brightness);  // set Brightness 0..15
+        for (int d = 0; d < numDevices; d++)
+        {
+            lc.setIntensity(d, brightness); // set Brightness 0..15
         }
     };
 
-    virtual const char* taskName() const {
+    virtual const char *taskName() const
+    {
         return "CTask";
     };
 
-    virtual void initializeTask() {
+    virtual void initializeTask()
+    {
         // Serial.println("CTask initializeTask()");
         initialized = true;
     };
 
-    virtual void closeTask() {
+    virtual void closeTask()
+    {
         // Serial.println("CTask closeTask()");
         initialized = false;
     };
 
-    void ProcessSwitch(bool switchState) const {
+    void ProcessSwitch(bool switchState) const
+    {
         Serial.print("switch = ");
         Serial.println(switchState);
 
         digitalWrite(RelaisPin, switchState ? HIGH : LOW);
     };
 
-    void Beep(const bool longBeep = false) const {
+    void Beep(const bool longBeep = false) const
+    {
         Serial.println("Beep");
 
         // 440Hz, 500/50ms
         tone(AudioPin, 440, longBeep ? 500 : 50);
     };
 
-    int getBrightness() const {
+    int getBrightness() const
+    {
         int brightness(defaultBrightness);
-        EEPROM.get(EEPROMaddrBrightness, brightness);  // Read the int value from EEPROM.
+        EEPROM.get(EEPROMaddrBrightness, brightness); // Read the int value from EEPROM.
 
-        if (brightness < 0 && brightness > 15) {
+        if (brightness < 0 && brightness > 15)
+        {
             brightness = defaultBrightness;
         }
 
         return brightness;
     }
 
-    void setBrightness(int brightness) const {
-        if (brightness < 0 && brightness > 15) {
+    void setBrightness(int brightness) const
+    {
+        if (brightness < 0 && brightness > 15)
+        {
             brightness = defaultBrightness;
         }
 
@@ -810,39 +842,45 @@ public:
 
         Serial.print("Set Brightness to ");
         Serial.println(brightness);
-        for (int d = 0; d < numDevices; d++) {
-            lc.setIntensity(d, brightness);  // set Brightness 0..15
+        for (int d = 0; d < numDevices; d++)
+        {
+            lc.setIntensity(d, brightness); // set Brightness 0..15
         }
     }
 
-    int getTimerValue() const {
+    int getTimerValue() const
+    {
         int value(10);
-        EEPROM.get(EEPROMaddrTimer, value);  // Read the int value from EEPROM.
+        EEPROM.get(EEPROMaddrTimer, value); // Read the int value from EEPROM.
 
         return value;
     }
 
-    void setTimerValue(int& value) const {
+    void setTimerValue(int &value) const
+    {
         if (value < 1 || value > 1000)
             value = 10;
 
         EEPROM.put(EEPROMaddrTimer, value);
     }
 
-    void ClearDisplay() const {
+    void ClearDisplay() const
+    {
         FillSolidArea(symbolStartColum, 31, 0);
     }
 
-    void ClearDisplayText(const int startColum = constDisplayStartColum) const {
+    void ClearDisplayText(const int startColum = constDisplayStartColum) const
+    {
         FillSolidArea(startColum, 31, 0);
     }
 
-    void display(long value, const char* unit = "", const int startColum = constDisplayStartColum) const {
+    void display(long value, const char *unit = "", const int startColum = constDisplayStartColum) const
+    {
         Serial.print("display value = ");
         Serial.println(value);
 
         // int to string conversion
-        char text[21] = { 0 };
+        char text[21] = {0};
         ltoa(value, text, 10);
         strcat(text, unit);
         TextDisplay(text, startColum);
@@ -867,34 +905,41 @@ public:
 };
 
 // Sets the brigness of the 8x8 darkroom ilumination LEDs.
-class CLEDBrightnessTask : public CTask {
+class CLEDBrightnessTask : public CTask
+{
 public:
-    virtual const char* taskName() const {
+    virtual const char *taskName() const
+    {
         return "LEDBrightnessTask";
     };
 
-    virtual void initializeTask() {
+    virtual void initializeTask()
+    {
         CTask::initializeTask();
 
         Serial.println("LEDBrightnessTask initializeTask()");
-        TextDisplay("~", symbolStartColum);  // use extend chars to implement symbols, ~ is the brightness symbol
+        TextDisplay("~", symbolStartColum); // use extend chars to implement symbols, ~ is the brightness symbol
 
         const int brightness(getBrightness());
         display(brightness);
     };
 
-    virtual void actionButton() {
+    virtual void actionButton()
+    {
         Serial.println("LEDBrightnessTask actionButton()");
     }
 
-    virtual void leftButton() {
+    virtual void leftButton()
+    {
         int brightness(getBrightness());
-        if (brightness > 0) {
+        if (brightness > 0)
+        {
             brightness--;
             setBrightness(brightness);
             display(brightness);
         }
-        else {
+        else
+        {
             brightness = 0;
             Beep();
         }
@@ -902,14 +947,17 @@ public:
         Serial.println("LEDBrightnessTask leftButton()");
     }
 
-    virtual void rightButton() {
+    virtual void rightButton()
+    {
         int brightness(getBrightness());
-        if (brightness < 15) {
+        if (brightness < 15)
+        {
             brightness++;
             setBrightness(brightness);
             display(brightness);
         }
-        else {
+        else
+        {
             brightness = 15;
             Beep();
         }
@@ -919,26 +967,30 @@ public:
 };
 
 // Manual enlarger switch.
-class CEnlargerOnOffTask : public CTask {
+class CEnlargerOnOffTask : public CTask
+{
 public:
     CEnlargerOnOffTask()
         : onOffSwitch(false) {};
 
 public:
-    virtual const char* taskName() const {
+    virtual const char *taskName() const
+    {
         return "EnlargerOnOffTask";
     };
 
-    virtual void initializeTask() {
+    virtual void initializeTask()
+    {
         CTask::initializeTask();
 
         Serial.println("EnlargerOnOffTask initializeTask()");
-        TextDisplay(onOffSwitch ? "}" : "{", symbolStartColum);  // use extend chars to implement symbols, } is closed switch, and { is opened switch
+        TextDisplay(onOffSwitch ? "}" : "{", symbolStartColum); // use extend chars to implement symbols, } is closed switch, and { is opened switch
 
         onOffSwitch = false;
     };
 
-    virtual void closeTask() {
+    virtual void closeTask()
+    {
         CTask::closeTask();
 
         // Serial.println("EnlargerOnOffTask closeTask()");
@@ -946,20 +998,23 @@ public:
         ProcessSwitch(onOffSwitch);
     };
 
-    virtual void actionButton() {
+    virtual void actionButton()
+    {
         Serial.println("EnlargerOnOffTask actionButton()");
         onOffSwitch = !onOffSwitch;
 
         ProcessSwitch(onOffSwitch);
-        TextDisplay(onOffSwitch ? "}" : "{", symbolStartColum);  // use extend chars to implement symbols, } is closed switch, and { is opened switch
+        TextDisplay(onOffSwitch ? "}" : "{", symbolStartColum); // use extend chars to implement symbols, } is closed switch, and { is opened switch
     }
 
-    virtual void leftButton() {
+    virtual void leftButton()
+    {
         Serial.println("EnlargerOnOffTask leftButton()");
         actionButton();
     }
 
-    virtual void rightButton() {
+    virtual void rightButton()
+    {
         Serial.println("EnlargerOnOffTask rightButton()");
         actionButton();
     }
@@ -969,27 +1024,30 @@ private:
 };
 
 // Timed enlarger switch.
-class CEnlargerTimerTask : public CTask {
+class CEnlargerTimerTask : public CTask
+{
 public:
     CEnlargerTimerTask()
         : timer(0),
-        timerStartFlag(true),
-        startTime(0L),
-        timer_max(30),
-        secondStart(0),
-        elapsedSeconds(0),
-        funcPtr(NULL) {};
+          timerStartFlag(true),
+          startTime(0L),
+          timer_max(30),
+          secondStart(0),
+          elapsedSeconds(0),
+          funcPtr(NULL) {};
 
 public:
-    virtual const char* taskName() const {
+    virtual const char *taskName() const
+    {
         return "EnlargerTimerTask";
     };
 
-    virtual void initializeTask() {
+    virtual void initializeTask()
+    {
         CTask::initializeTask();
 
         Serial.println("EnlargerTimerTask initializeTask()");
-        TextDisplay("[", symbolStartColum);  // use extend chars to implement symbols, [ is the enlarger symbol
+        TextDisplay("[", symbolStartColum); // use extend chars to implement symbols, [ is the enlarger symbol
 
         timer = getTimerValue();
         Serial.print("timer value = ");
@@ -1000,7 +1058,8 @@ public:
         display(timer, "s");
     };
 
-    virtual void closeTask() {
+    virtual void closeTask()
+    {
         CTask::closeTask();
 
         Serial.println("EnlargerTimerTask closeTask()");
@@ -1008,17 +1067,21 @@ public:
         funcPtr = NULL;
     };
 
-    virtual void actionButton() {
+    virtual void actionButton()
+    {
         Serial.println("EnlargerTimerTask actionButton()");
         Serial.println("timer init");
 
-        if (timerStartFlag) {
+        if (timerStartFlag)
+        {
             setTimerValue(timer);
             display(timer, "s");
         }
-        else {
+        else
+        {
             const long remainingSeconds(timer - elapsedSeconds);
-            if (remainingSeconds >= 0 && remainingSeconds < timer_max) {
+            if (remainingSeconds >= 0 && remainingSeconds < timer_max)
+            {
                 int rs(remainingSeconds);
                 setTimerValue(rs);
                 timer = rs;
@@ -1036,51 +1099,62 @@ public:
         funcPtr = &CEnlargerTimerTask::timerFunc;
     }
 
-    virtual void step() {
+    virtual void step()
+    {
         if (funcPtr)
             (this->*funcPtr)();
     };
 
-    virtual void leftButton() {
+    virtual void leftButton()
+    {
         if (timer > 1)
             timer--;
 
         Serial.println("EnlargerTimerTask leftButton()");
 
-        if (timerStartFlag) {
+        if (timerStartFlag)
+        {
             display(timer, "s");
         }
-        else {
+        else
+        {
             const long remainingSeconds(timer - elapsedSeconds);
-            if (remainingSeconds >= 0 && remainingSeconds < timer_max) {
+            if (remainingSeconds >= 0 && remainingSeconds < timer_max)
+            {
                 display(remainingSeconds, "s");
             }
         }
     }
 
-    virtual void rightButton() {
+    virtual void rightButton()
+    {
         if (timer < timer_max)
             timer++;
 
         Serial.println("EnlargerTimerTask rightButton()");
 
-        if (timerStartFlag) {
+        if (timerStartFlag)
+        {
             display(timer, "s");
         }
-        else {
+        else
+        {
             const long remainingSeconds(timer - elapsedSeconds);
-            if (remainingSeconds >= 0 && remainingSeconds < timer_max) {
+            if (remainingSeconds >= 0 && remainingSeconds < timer_max)
+            {
                 display(remainingSeconds, "s");
             }
         }
     }
 
 private:
-    virtual void timerFunc() {
+    virtual void timerFunc()
+    {
         const unsigned long currentTime(millis());
 
         // Process start.
-        if (timerStartFlag) {
+        if (timerStartFlag)
+        {
             Serial.print(" timer start = ");
             Serial.print(timer);
             Serial.println("s");
@@ -1091,7 +1165,8 @@ private:
         }
 
         // Process each second.
-        if (currentTime - secondStart >= 1000 && timer >= elapsedSeconds) {
+        if (currentTime - secondStart >= 1000 && timer >= elapsedSeconds)
+        {
             elapsedSeconds++;
             secondStart = millis();
 
@@ -1106,7 +1181,8 @@ private:
             Beep();
         }
 
-        if (currentTime - startTime >= timer * 1000 || timer <= elapsedSeconds) {
+        if (currentTime - startTime >= timer * 1000 || timer <= elapsedSeconds)
+        {
             Serial.print("timer end, duration: ");
             Serial.print(currentTime - startTime);
             Serial.println("ms");
@@ -1131,57 +1207,63 @@ private:
     const unsigned int timer_max;
     unsigned long secondStart;
     int elapsedSeconds;
-    void (CEnlargerTimerTask::* funcPtr)();
+    void (CEnlargerTimerTask::*funcPtr)();
 };
 
 // 3 timers for develop, stop bath and fix.
-class CDevelopStopFixTask : public CTask {
+class CDevelopStopFixTask : public CTask
+{
 public:
     CDevelopStopFixTask()
         : timerDevelop(60),
-        timerStopBath(10),
-        timerFix(20),
-        timerStartFlag(true),
-        secondStart(0),
-        elapsedSeconds(0),
-        funcPtr(NULL) {
+          timerStopBath(10),
+          timerFix(20),
+          timerStartFlag(true),
+          secondStart(0),
+          elapsedSeconds(0),
+          funcPtr(NULL)
+    {
         ResetStage();
     };
 
 public:
-    virtual const char* taskName() const {
+    virtual const char *taskName() const
+    {
         return "DevelopStopFixTask";
     };
 
-    virtual void initializeTask() {
+    virtual void initializeTask()
+    {
         CTask::initializeTask();
 
         Serial.println("DevelopStopFixTask initializeTask()");
-        TextDisplay("|", symbolStartColum);  // use extend chars to implement symbols, | are the tray symbols
+        TextDisplay("|", symbolStartColum); // use extend chars to implement symbols, | are the tray symbols
 
         // Develop=1m, Stopbath=10s, Fix=30s
         // one tray in the symbol is 8 pixel wide
-        char nstr[10] = { 0 };
+        char nstr[10] = {0};
         toSmallNumberString(nstr, timerDevelop);
-        TextDisplay(nstr, symbolStartColum + 4 - GetTextWidth(nstr) / 2, true);  // use small font
+        TextDisplay(nstr, symbolStartColum + 4 - GetTextWidth(nstr) / 2, true); // use small font
 
         toSmallNumberString(nstr, timerStopBath);
-        TextDisplay(nstr, symbolStartColum + 12 - GetTextWidth(nstr) / 2, true);  // use small font
+        TextDisplay(nstr, symbolStartColum + 12 - GetTextWidth(nstr) / 2, true); // use small font
 
         toSmallNumberString(nstr, timerFix);
-        TextDisplay(nstr, symbolStartColum + 20 - GetTextWidth(nstr) / 2, true);  // use small font
+        TextDisplay(nstr, symbolStartColum + 20 - GetTextWidth(nstr) / 2, true); // use small font
 
         ResetStage();
     };
 
-    virtual void closeTask() {
+    virtual void closeTask()
+    {
         CTask::closeTask();
 
         Serial.println("DevelopStopFixTask closeTask()");
         funcPtr = NULL;
     };
 
-    virtual void actionButton() {
+    virtual void actionButton()
+    {
         Serial.println("DevelopStopFixTask actionButton()");
         Serial.println("timer init");
 
@@ -1189,14 +1271,17 @@ public:
         ProcessStage(processStage);
     }
 
-    virtual void step() {
+    virtual void step()
+    {
         if (funcPtr)
             (this->*funcPtr)();
     };
 
-    virtual void leftButton() {
+    virtual void leftButton()
+    {
         // Skip back to the previous stage.
-        if (processStage > DevelopStopFixStage::BeginStage + 1) {
+        if (processStage > DevelopStopFixStage::BeginStage + 1)
+        {
             processStage--;
         }
 
@@ -1205,9 +1290,11 @@ public:
         Serial.println("DevelopStopFixTask leftButton()");
     }
 
-    virtual void rightButton() {
+    virtual void rightButton()
+    {
         // Skip to the next stage.
-        if (processStage < DevelopStopFixStage::EndStage - 1) {
+        if (processStage < DevelopStopFixStage::EndStage - 1)
+        {
             processStage++;
         }
 
@@ -1217,13 +1304,15 @@ public:
     }
 
 private:
-    void ResetStage() {
+    void ResetStage()
+    {
         processStage = DevelopStopFixStage::BeginStage;
         funcPtr = NULL;
         timerStartFlag = true;
     }
 
-    void ProcessStage(DevelopStopFixStage stage) {
+    void ProcessStage(DevelopStopFixStage stage)
+    {
 
         // timer init
         startTime = millis();
@@ -1231,7 +1320,8 @@ private:
         elapsedSeconds = 0;
         timerStartFlag = true;
 
-        switch (stage) {
+        switch (stage)
+        {
         case DevelopStopFixStage::DevelopStage:
         {
             Serial.println("DevelopStage");
@@ -1266,23 +1356,28 @@ private:
         }
     }
 
-    virtual void timerDevelopFunc() {
+    virtual void timerDevelopFunc()
+    {
         timerFunc("timerDevelop", timerDevelop);
     }
 
-    virtual void timerStopBathFunc() {
+    virtual void timerStopBathFunc()
+    {
         timerFunc("timerStopBath", timerStopBath);
     }
 
-    virtual void timerFixFunc() {
+    virtual void timerFixFunc()
+    {
         timerFunc("timerFix", timerFix);
     }
 
-    virtual void timerFunc(const char* timeName, const unsigned int timerLength) {
+    virtual void timerFunc(const char *timeName, const unsigned int timerLength)
+    {
         const unsigned long currentTime(millis());
 
         // Process start.
-        if (timerStartFlag) {
+        if (timerStartFlag)
+        {
             Serial.print(" timer start = ");
             Serial.print(timerLength);
             Serial.println("s");
@@ -1293,7 +1388,8 @@ private:
         }
 
         // Process each second.
-        if (currentTime - secondStart >= 1000 && timerLength > elapsedSeconds) {
+        if (currentTime - secondStart >= 1000 && timerLength > elapsedSeconds)
+        {
             elapsedSeconds++;
             secondStart = millis();
 
@@ -1310,7 +1406,8 @@ private:
             Beep();
         }
 
-        if (currentTime - startTime >= timerLength * 1000 || timerLength <= elapsedSeconds) {
+        if (currentTime - startTime >= timerLength * 1000 || timerLength <= elapsedSeconds)
+        {
             Serial.print(timeName);
             Serial.print(" end, duration: ");
             Serial.print(currentTime - startTime);
@@ -1332,26 +1429,29 @@ private:
     unsigned long secondStart;
     bool timerStartFlag;
     int elapsedSeconds;
-    void (CDevelopStopFixTask::* funcPtr)();
+    void (CDevelopStopFixTask::*funcPtr)();
 };
 
 // General timer starting from 0s.
-class CGeneralTimerTask : public CTask {
+class CGeneralTimerTask : public CTask
+{
 public:
     CGeneralTimerTask()
         : timer(0),
-        timerStartFlag(true),
-        startTime(0L),
-        secondStart(0),
-        startColumn(GetCharWidth('t') + 10),
-        funcPtr(NULL) {};
+          timerStartFlag(true),
+          startTime(0L),
+          secondStart(0),
+          startColumn(GetCharWidth('t') + 10),
+          funcPtr(NULL) {};
 
 public:
-    virtual const char* taskName() const {
+    virtual const char *taskName() const
+    {
         return "CGeneralTimerTask";
     };
 
-    virtual void initializeTask() {
+    virtual void initializeTask()
+    {
         CTask::initializeTask();
 
         Serial.println("CGeneralTimerTask initializeTask()");
@@ -1363,14 +1463,16 @@ public:
         display(timer, "s", startColumn);
     };
 
-    virtual void closeTask() {
+    virtual void closeTask()
+    {
         CTask::closeTask();
 
         Serial.println("CGeneralTimerTask closeTask()");
         funcPtr = NULL;
     };
 
-    virtual void actionButton() {
+    virtual void actionButton()
+    {
         Serial.println("CGeneralTimerTask actionButton()");
         Serial.println("timer init");
 
@@ -1383,27 +1485,32 @@ public:
         funcPtr = &CGeneralTimerTask::timerFunc;
     }
 
-    virtual void step() {
+    virtual void step()
+    {
         if (funcPtr)
             (this->*funcPtr)();
     };
 
-    virtual void leftButton() {
+    virtual void leftButton()
+    {
         Serial.println("CGeneralTimerTask leftButton()");
         actionButton();
     }
 
-    virtual void rightButton() {
+    virtual void rightButton()
+    {
         Serial.println("CGeneralTimerTask rightButton()");
         actionButton();
     }
 
 private:
-    virtual void timerFunc() {
+    virtual void timerFunc()
+    {
         const unsigned long currentTime(millis());
 
         // Process start.
-        if (timerStartFlag) {
+        if (timerStartFlag)
+        {
             Serial.print(" timer start = ");
             Serial.print(timer);
             Serial.println("s");
@@ -1414,7 +1521,8 @@ private:
         }
 
         // Process each second.
-        if (currentTime - secondStart >= 1000) {
+        if (currentTime - secondStart >= 1000)
+        {
             timer++;
             secondStart = millis();
 
@@ -1425,11 +1533,13 @@ private:
             display(timer, "s", startColumn);
 
             // Long beep every 30s.
-            if (timer % 30 == 0) {
+            if (timer % 30 == 0)
+            {
                 // Long beep.
                 Beep(true);
             }
-            else {
+            else
+            {
                 // Short Beep.
                 Beep();
             }
@@ -1442,23 +1552,25 @@ private:
     unsigned long startTime;
     unsigned long secondStart;
     const unsigned int startColumn;
-    void (CGeneralTimerTask::* funcPtr)();
+    void (CGeneralTimerTask::*funcPtr)();
 };
 
-
-class TaskManager {
+class TaskManager
+{
 public:
     TaskManager()
         : numTasks(DarkroomTasks::End),
-        activeTaskIndex(DarkroomTasks::LEDBrightnessTask) {
-        tasks = new CTask * [numTasks];
+          activeTaskIndex(DarkroomTasks::LEDBrightnessTask)
+    {
+        tasks = new CTask *[numTasks];
 
         // Create the task list matching the order of the DarkroomTasks enum.
         Serial.print("Create ");
         Serial.print(numTasks);
         Serial.println(" tasks:");
 
-        for (int task = 0; task < numTasks; task++) {
+        for (int task = 0; task < numTasks; task++)
+        {
             tasks[task] = createObject((DarkroomTasks)task);
             Serial.print(" Created task ");
             Serial.println(tasks[task]->taskName());
@@ -1470,52 +1582,63 @@ public:
         Serial.println(tasks[activeTaskIndex]->taskName());
     }
 
-    ~TaskManager() {
-        for (int i = 0; i < numTasks; ++i) {
+    ~TaskManager()
+    {
+        for (int i = 0; i < numTasks; ++i)
+        {
             delete tasks[i];
         }
 
         delete[] tasks;
     }
 
-    void step() {
+    void step()
+    {
         getTask()->step();
     }
 
-    CTask* getTask() const {
-        CTask* task(tasks[activeTaskIndex]);
-        if (task->initialized) {
+    CTask *getTask() const
+    {
+        CTask *task(tasks[activeTaskIndex]);
+        if (task->initialized)
+        {
             return task;
         }
-        else {
+        else
+        {
             Serial.println("*** getTask() : task not initialized ***\n");
             assert(false);
             return NULL;
         }
     }
 
-    void setTask(DarkroomTasks taskIndex) {
+    void setTask(DarkroomTasks taskIndex)
+    {
         tasks[activeTaskIndex]->closeTask();
         activeTaskIndex = taskIndex;
         tasks[activeTaskIndex]->initializeTask();
     }
 
-    void setNextTask() {
+    void setNextTask()
+    {
         tasks[activeTaskIndex]->closeTask();
         activeTaskIndex = (activeTaskIndex + 1) % numTasks;
         tasks[activeTaskIndex]->initializeTask();
     }
 
-    void setPreviousTask() {
+    void setPreviousTask()
+    {
         tasks[activeTaskIndex]->closeTask();
         activeTaskIndex = (activeTaskIndex + numTasks - 1) % numTasks;
         tasks[activeTaskIndex]->initializeTask();
     }
 
 private:
-    CTask* createObject(enum DarkroomTasks type) {
+    CTask *createObject(enum DarkroomTasks type)
+    {
 
-        switch (type) {
+        switch (type)
+        {
 
         case DarkroomTasks::LEDBrightnessTask:
             return new CLEDBrightnessTask();
@@ -1535,13 +1658,13 @@ private:
     }
 
 private:
-    CTask** tasks;
+    CTask **tasks;
     const int numTasks;
     int activeTaskIndex;
 };
 
 // The TaskManager.
-TaskManager* taskManager;
+TaskManager *taskManager;
 
 // Base class defining an input device.
 class InputDevice
@@ -1549,11 +1672,10 @@ class InputDevice
 public:
     InputDevice(const int pin, std::function<void()> funcPtr)
         : pin(pin),
-        funcPtr(funcPtr),
-        switchDelay(50),
-        previousState(false)
-    {
-    };
+          funcPtr(funcPtr),
+          switchDelay(50),
+          previousState(false) {
+          };
 
     virtual void CheckInput() = 0;
 
@@ -1575,11 +1697,10 @@ class InputSet
 {
 public:
     InputSet()
-        : deviceCount(0)
-    {
-    };
+        : deviceCount(0) {
+          };
 
-    void Add(InputDevice* inputDevice)
+    void Add(InputDevice *inputDevice)
     {
         inputDevices[deviceCount++] = inputDevice;
     };
@@ -1594,16 +1715,16 @@ public:
 
 private:
     int deviceCount;
-    InputDevice* inputDevices[9];  // Keep things simple, fixed array for the 9 inputs.
+    InputDevice *inputDevices[9]; // Keep things simple, fixed array for the 9 inputs.
 };
 
 // The button input device.
 class ButtonDebouncing : public InputDevice
 {
 public:
-    ButtonDebouncing(InputSet& inputSet, const int pin, std::function<void()> funcPtr)
+    ButtonDebouncing(InputSet &inputSet, const int pin, std::function<void()> funcPtr)
         : InputDevice(pin, funcPtr),
-        debounceDelay(50)
+          debounceDelay(50)
     {
         // Set button pin as input with internal pull-up resistors for the GamePad Shield.
         pinMode(pin, INPUT_PULLUP);
@@ -1614,11 +1735,13 @@ public:
 
     virtual void CheckInput()
     {
-      // Simple debounce: If button is pressed, check again after 50ms if button is still pressed. 
+        // Simple debounce: If button is pressed, check again after 50ms if button is still pressed.
         const bool buttonPressedState(digitalRead(pin) == LOW);
 
-        if (previousState != buttonPressedState) {
-            if (buttonPressedState) {
+        if (previousState != buttonPressedState)
+        {
+            if (buttonPressedState)
+            {
                 delay(debounceDelay);
 
                 if (digitalRead(pin) == LOW)
@@ -1646,13 +1769,13 @@ enum AnalogRange
 class AnalogDebouncing : public InputDevice
 {
 public:
-    AnalogDebouncing(InputSet& inputSet, const int pin, const enum AnalogRange analogRange, std::function<void()> funcPtr)
+    AnalogDebouncing(InputSet &inputSet, const int pin, const enum AnalogRange analogRange, std::function<void()> funcPtr)
         : InputDevice(pin, funcPtr),
-        analogRange(analogRange),
-        lowerThreshold(100),  // lower 100, 0+100
-        upperThreshold(924),  // upper 100, 1024-100
-        thresholdOffset(100),
-        thresholdLength(10)
+          analogRange(analogRange),
+          lowerThreshold(100), // lower 100, 0+100
+          upperThreshold(924), // upper 100, 1024-100
+          thresholdOffset(100),
+          thresholdLength(10)
     {
         // Add this instance to the input set.
         inputSet.Add(this);
@@ -1669,14 +1792,15 @@ public:
         {
             analogState = position < (lowerThreshold + (previousState ? thresholdLength : 0));
         }
-        else
-            if (analogRange == AnalogRange::UpperHalf && position > upperThreshold - thresholdOffset)
-            {
-                analogState = position > (upperThreshold + (previousState ? 0 : thresholdLength));
-            }
+        else if (analogRange == AnalogRange::UpperHalf && position > upperThreshold - thresholdOffset)
+        {
+            analogState = position > (upperThreshold + (previousState ? 0 : thresholdLength));
+        }
 
-        if (previousState != analogState) {
-            if (analogState) {
+        if (previousState != analogState)
+        {
+            if (analogState)
+            {
                 callFunction();
             }
 
@@ -1696,57 +1820,67 @@ private:
 // 5 Button and 4 analog inputs.
 InputSet inputSet;
 
-ButtonDebouncing kButton(inputSet, BUTTON_K, []() { taskManager->getTask()->actionButton(); }); // Joystick Button
-ButtonDebouncing leftButton(inputSet, BUTTON_LEFT, []() { taskManager->getTask()->leftButton(); });
-ButtonDebouncing rightButton(inputSet, BUTTON_RIGHT, []() { taskManager->getTask()->rightButton(); });
-ButtonDebouncing upButton(inputSet, BUTTON_UP, []() { taskManager->setPreviousTask(); });
-ButtonDebouncing downButton(inputSet, BUTTON_DOWN, []() { taskManager->setNextTask(); });
+ButtonDebouncing kButton(inputSet, BUTTON_K, []()
+                         { taskManager->getTask()->actionButton(); }); // Joystick Button
+ButtonDebouncing leftButton(inputSet, BUTTON_LEFT, []()
+                            { taskManager->getTask()->leftButton(); });
+ButtonDebouncing rightButton(inputSet, BUTTON_RIGHT, []()
+                             { taskManager->getTask()->rightButton(); });
+ButtonDebouncing upButton(inputSet, BUTTON_UP, []()
+                          { taskManager->setPreviousTask(); });
+ButtonDebouncing downButton(inputSet, BUTTON_DOWN, []()
+                            { taskManager->setNextTask(); });
 
 // Use the lower or upper half of the analog range as a switch.
-AnalogDebouncing leftAnalog(inputSet, PIN_ANALOG_X, AnalogRange::LowerHalf, []() { taskManager->getTask()->leftButton(); });
-AnalogDebouncing rightAnalog(inputSet, PIN_ANALOG_X, AnalogRange::UpperHalf, []() { taskManager->getTask()->rightButton(); });
-AnalogDebouncing upAnalog(inputSet, PIN_ANALOG_Y, AnalogRange::UpperHalf, []() { taskManager->setPreviousTask(); });
-AnalogDebouncing downAnalog(inputSet, PIN_ANALOG_Y, AnalogRange::LowerHalf, []() { taskManager->setNextTask(); });
-
+AnalogDebouncing leftAnalog(inputSet, PIN_ANALOG_X, AnalogRange::LowerHalf, []()
+                            { taskManager->getTask()->leftButton(); });
+AnalogDebouncing rightAnalog(inputSet, PIN_ANALOG_X, AnalogRange::UpperHalf, []()
+                             { taskManager->getTask()->rightButton(); });
+AnalogDebouncing upAnalog(inputSet, PIN_ANALOG_Y, AnalogRange::UpperHalf, []()
+                          { taskManager->setPreviousTask(); });
+AnalogDebouncing downAnalog(inputSet, PIN_ANALOG_Y, AnalogRange::LowerHalf, []()
+                            { taskManager->setNextTask(); });
 
 // Run once.
-void setup() {
+void setup()
+{
 
     Serial.begin(9600);
 
-    //while(!Serial); // Wait here until the serial port is ready.
+    // while(!Serial); // Wait here until the serial port is ready.
 
     Serial.println("DarkroomTimer");
 
     // Setup the relais and beeper.
     pinMode(LED_BUILTIN, OUTPUT);
-    pinMode(RelaisPin, OUTPUT);  // Set D9 as an output.
-    pinMode(AudioPin, OUTPUT);   // Set D13 as an output.
+    pinMode(RelaisPin, OUTPUT); // Set D9 as an output.
+    pinMode(AudioPin, OUTPUT);  // Set D13 as an output.
 
     // Setup the 8x8 LEDs.
-    for (int d = 0; d < numDevices; d++) {
-        lc.shutdown(d, false);  // MAX72XX is in power-saving mode when startet.
-        lc.setIntensity(d, 0);  // set Brightness 0..15
+    for (int d = 0; d < numDevices; d++)
+    {
+        lc.shutdown(d, false); // MAX72XX is in power-saving mode when startet.
+        lc.setIntensity(d, 0); // set Brightness 0..15
         lc.clearDisplay(d);
     }
 
     // Setup the main task manager to handle all the defined tasks.
     taskManager = new TaskManager();
-    // taskManager.setTask(DarkroomTasks::EnlargerTimerTask);
-    // taskManager.getTask()->actionButton();
 
     // Use the first 8x8 block for the darkroom lumination.
     FillSolidArea(0, 7);
 
     // Blink board LED 3x to signal end of setup.
-    for (int i = 1; i <= 6; i++) {
+    for (int i = 1; i <= 6; i++)
+    {
         digitalWrite(LED_BUILTIN, i % 2);
         delay(100);
     }
 }
 
 // The main loop.
-void loop() {
+void loop()
+{
 
     // Read all button and analog input.
     inputSet.CheckInput();
