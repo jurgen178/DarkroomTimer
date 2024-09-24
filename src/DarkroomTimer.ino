@@ -1820,26 +1820,17 @@ private:
 // 5 Button and 4 analog inputs.
 InputSet inputSet;
 
-ButtonDebouncing kButton(inputSet, BUTTON_K, []()
-                         { taskManager->getTask()->actionButton(); }); // Joystick Button
-ButtonDebouncing leftButton(inputSet, BUTTON_LEFT, []()
-                            { taskManager->getTask()->leftButton(); });
-ButtonDebouncing rightButton(inputSet, BUTTON_RIGHT, []()
-                             { taskManager->getTask()->rightButton(); });
-ButtonDebouncing upButton(inputSet, BUTTON_UP, []()
-                          { taskManager->setPreviousTask(); });
-ButtonDebouncing downButton(inputSet, BUTTON_DOWN, []()
-                            { taskManager->setNextTask(); });
+ButtonDebouncing kButton(inputSet, BUTTON_K, []() { taskManager->getTask()->actionButton(); }); // Joystick Button
+ButtonDebouncing leftButton(inputSet, BUTTON_LEFT, []() { taskManager->getTask()->leftButton(); });
+ButtonDebouncing rightButton(inputSet, BUTTON_RIGHT, []() { taskManager->getTask()->rightButton(); });
+ButtonDebouncing upButton(inputSet, BUTTON_UP, []() { taskManager->setPreviousTask(); });
+ButtonDebouncing downButton(inputSet, BUTTON_DOWN, []() { taskManager->setNextTask(); });
 
 // Use the lower or upper half of the analog range as a switch.
-AnalogDebouncing leftAnalog(inputSet, PIN_ANALOG_X, AnalogRange::LowerHalf, []()
-                            { taskManager->getTask()->leftButton(); });
-AnalogDebouncing rightAnalog(inputSet, PIN_ANALOG_X, AnalogRange::UpperHalf, []()
-                             { taskManager->getTask()->rightButton(); });
-AnalogDebouncing upAnalog(inputSet, PIN_ANALOG_Y, AnalogRange::UpperHalf, []()
-                          { taskManager->setPreviousTask(); });
-AnalogDebouncing downAnalog(inputSet, PIN_ANALOG_Y, AnalogRange::LowerHalf, []()
-                            { taskManager->setNextTask(); });
+AnalogDebouncing leftAnalog(inputSet, PIN_ANALOG_X, AnalogRange::LowerHalf, []() { taskManager->getTask()->leftButton(); });
+AnalogDebouncing rightAnalog(inputSet, PIN_ANALOG_X, AnalogRange::UpperHalf, []() { taskManager->getTask()->rightButton(); });
+AnalogDebouncing upAnalog(inputSet, PIN_ANALOG_Y, AnalogRange::UpperHalf, []() { taskManager->setPreviousTask(); });
+AnalogDebouncing downAnalog(inputSet, PIN_ANALOG_Y, AnalogRange::LowerHalf, []() { taskManager->setNextTask(); });
 
 // Run once.
 void setup()
