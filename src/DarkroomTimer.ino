@@ -3,7 +3,7 @@
 //
 // Implements 5 tasks:
 
-// LEDBrightnessTask : Sets the brigness of the 8x8 darkroom ilumination LEDs.
+// LEDBrightnessTask : Sets the brightness of the 8x8 darkroom ilumination LEDs.
 // EnlargerOnOffTask : Manual enlarger switch.
 // EnlargerTimerTask : Timed enlarger switch.
 // DevelopStopFixTask : 3 timers for develop, stop bath and fix.
@@ -49,7 +49,7 @@ LedControl lc = LedControl(12, 11, 10, numDevices);
 // Set the order of the darkroom tasks.
 enum DarkroomTasks
 {
-    LEDBrightnessTask,  // Sets the brigness of the 8x8 darkroom ilumination LEDs.
+    LEDBrightnessTask,  // Sets the brightness of the 8x8 darkroom ilumination LEDs.
     EnlargerOnOffTask,  // Manual enlarger switch.
     EnlargerTimerTask,  // Timed enlarger switch.
     DevelopStopFixTask, // 3 timers for develop, stop bath and fix.
@@ -904,7 +904,7 @@ public:
     const int EEPROMaddrTimer;
 };
 
-// Sets the brigness of the 8x8 darkroom ilumination LEDs.
+// Sets the brightness of the 8x8 darkroom ilumination LEDs.
 class CLEDBrightnessTask : public CTask
 {
 public:
