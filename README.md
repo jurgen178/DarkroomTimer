@@ -6,7 +6,8 @@ https://github.com/user-attachments/assets/7a2ae1d2-c87a-452d-9ca1-876dc4518d32
 
 
 
-Uses the Gamepad Input shield and Arduino Uno R4. Wiring info is in the src. Up/down button/joystick changes task, and left/right button/joystick changes state/setting.
+Uses the Gamepad Input shield and Arduino Uno R4. Wiring info is in the src.  
+Up/down button/joystick changes task, and left/right button/joystick changes state/setting.  
 
 With the first 8x8 LED block to illuminate the darkroom.  
 
