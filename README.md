@@ -2,7 +2,8 @@
 
 ![](doc/DSC_5918.JPG)  
 
-[![10s Timer](doc/DSC_5941.png)](doc/DSC_5941-Kopie.MP4)
+https://github.com/user-attachments/assets/7a2ae1d2-c87a-452d-9ca1-876dc4518d32
+
 
 
 Uses the Gamepad Input shield and Arduino Uno R4.  
