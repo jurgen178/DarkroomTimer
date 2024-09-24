@@ -19,7 +19,7 @@ Implements 5 tasks
 ![](doc/index0.JPG)  
 
 ## LEDBrightnessTask
-Sets the brigness of the 8x8 darkroom ilumination LEDs from min 0 to max 15.
+Sets the brightness of the 8x8 darkroom ilumination LEDs from min 0 to max 15.
 
 ![](doc/index1.JPG)  
 
